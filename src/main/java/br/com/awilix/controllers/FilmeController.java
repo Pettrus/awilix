@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.awilix.services.FilmeService;
+import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
 
 @RestController
@@ -26,5 +27,15 @@ public class FilmeController {
 	@GetMapping("/{filmeId}")
 	public MovieDb detalhes(@PathVariable Integer filmeId) {
 		return service.detalhes(filmeId);
+	}
+	
+	@GetMapping("/generos")
+	public List<Genre> generos() {
+		return service.consultarGeneros();
+	}
+	
+	@GetMapping("/genero/{id}/{pagina}")
+	public List<MovieDb> listarPorGenero(@PathVariable Integer id, @PathVariable Integer pagina) {
+		return service.pesquisarPorGenero(id, pagina);
 	}
 }
