@@ -38,4 +38,9 @@ public class FilmeController {
 	public List<MovieDb> listarPorGenero(@PathVariable Integer id, @PathVariable Integer pagina) {
 		return service.pesquisarPorGenero(id, pagina);
 	}
+	
+	@GetMapping("/{nome}/{pagina}")
+	public List<MovieDb> listarPorNome(@PathVariable String nome, @PathVariable Integer pagina) {
+		return service.pesquisarPorNome(nome, pagina);
+	}
 }

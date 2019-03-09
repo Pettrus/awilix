@@ -43,4 +43,14 @@ public class FilmeService {
 		
 		return lista;
 	}
+	
+	public List<MovieDb> pesquisarPorNome(String nome, Integer pagina) {
+		List<MovieDb> lista = TmdbWrapper.getInstance().getSearch().searchMovie(nome, null, "pt-BR", false, pagina).getResults();
+		
+		lista.forEach(filme -> {
+			filme.setReleases(new TmdbMovies.ReleaseInfoResults());
+		});
+		
+		return lista;
+	}
 }
