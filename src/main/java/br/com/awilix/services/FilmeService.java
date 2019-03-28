@@ -4,6 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+
 import br.com.awilix.tmdb.TmdbWrapper;
 import info.movito.themoviedbapi.TmdbMovies;
 import info.movito.themoviedbapi.TmdbMovies.MovieMethod;
@@ -52,5 +56,9 @@ public class FilmeService {
 		});
 		
 		return lista;
+	}
+	
+	public HttpResponse<String> pesquisarPopCornPorImdb(String imdbId) throws UnirestException {
+		return Unirest.get("https://tv-v2.api-fetch.website/movie/" + imdbId).asString();
 	}
 }

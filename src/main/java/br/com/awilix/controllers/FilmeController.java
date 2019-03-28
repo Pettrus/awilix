@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
+
 import br.com.awilix.services.FilmeService;
 import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
@@ -27,6 +29,11 @@ public class FilmeController {
 	@GetMapping("/{filmeId}")
 	public MovieDb detalhes(@PathVariable Integer filmeId) {
 		return service.detalhes(filmeId);
+	}
+	
+	@GetMapping("/popcorn/{imdbId}")
+	public String consultarPopCorn(@PathVariable String imdbId) throws UnirestException {
+		return service.pesquisarPopCornPorImdb(imdbId).getBody();
 	}
 	
 	@GetMapping("/generos")

@@ -9,4 +9,6 @@ import br.com.awilix.models.Usuario;
 public interface UsuarioRepository extends PagingAndSortingRepository<Usuario, Long> {
 
 	Optional<Usuario> findByEmail(String email);
+	
+	Optional<Usuario> findByTokenConfirmacao(String token);
 }

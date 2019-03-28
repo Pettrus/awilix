@@ -1,10 +1,13 @@
 package br.com.awilix.controllers;
 
+import java.io.IOException;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,15 +26,17 @@ public class AutenticacaoController {
 	@PostMapping("/login")
 	public ResponseEntity<?> logar(@RequestBody Usuario usuario) {
 		Usuario logado = service.logar(usuario);
-		
-		if(logado == null)
-			return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
 
 		return ResponseEntity.ok(logado);
 	}
 	
+	@GetMapping("/{token}")
+	public boolean verificarConfirmacaoToken(@PathVariable String token) {
+		return service.isTokenConfirmacaoValido(token);
+	}
+	
 	@PostMapping(produces="application/json")
-	public void cadastro(@Valid @RequestBody Usuario usuario) {
+	public void cadastro(@Valid @RequestBody Usuario usuario) throws IOException {
 		service.cadastrar(usuario);
 	}
 }

@@ -1,7 +1,9 @@
 package br.com.awilix.services;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -21,13 +23,20 @@ public class AutenticacaoService {
 	
 	@Autowired
     private BCryptPasswordEncoder bcryptEncoder;
-
+	
+	@Autowired
+	private EmailService email;
+	
 	@Transactional
 	public Usuario logar(Usuario auth) {
 		Optional<Usuario> usuario = repository.findByEmail(auth.getEmail());
 		
 		if(usuario.isPresent() &&
 				bcryptEncoder.matches(auth.getSenha(), usuario.get().getSenha())) {
+			
+			if(!usuario.get().getEmailConfirmado())
+				throw new GeneralException("Email ainda não confirmado, acesse seu email para confirmar");
+				
 			usuario.get().setToken(TokenAuthenticationService.gerarJwt(usuario.get()));
 			
 			repository.save(usuario.get());
@@ -35,17 +44,36 @@ public class AutenticacaoService {
 			return usuario.get();
 		}
 		
-		return null;
+		throw new GeneralException("Email ou senha incorretos.");
 	}
 	
-	public void cadastrar(Usuario usuario) {
+	public boolean isTokenConfirmacaoValido(String token) {
+		Optional<Usuario> usuario = repository.findByTokenConfirmacao(token);
+		
+		if(usuario.isPresent()) {
+			usuario.get().setDataConfirmacao(new Date());
+			usuario.get().setEmailConfirmado(true);
+			
+			repository.save(usuario.get());
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	@Transactional
+	public void cadastrar(Usuario usuario) throws IOException {
 		Optional<Usuario> usuarioExistente = repository.findByEmail(usuario.getEmail());
 		
 		if(usuarioExistente.isPresent()) throw new GeneralException("Já existe um usuário cadastrado com esse email");
 		
 		usuario.setDataCadastro(new Date());
 		usuario.setSenha(bcryptEncoder.encode(usuario.getSenha()));
+		usuario.setTokenConfirmacao(UUID.randomUUID().toString());
 		
 		repository.save(usuario);
+		
+		//email.cadastroUsuario(usuario);
 	}
 }

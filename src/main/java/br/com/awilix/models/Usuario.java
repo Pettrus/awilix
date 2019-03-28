@@ -67,4 +67,17 @@ public class Usuario implements AbstractEntity {
 	@Column(nullable=false)
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private Date dataCadastro;
+	
+	@Column(nullable=true)
+	@JsonProperty(access = Access.WRITE_ONLY)
+	private Date dataConfirmacao;
+
+	@Builder.Default
+	@Column(nullable=false)
+	@JsonProperty(access = Access.WRITE_ONLY)
+	private Boolean emailConfirmado = false;
+	
+	@Column(nullable=false)
+	@JsonProperty(access = Access.WRITE_ONLY)
+	private String tokenConfirmacao;
 }
