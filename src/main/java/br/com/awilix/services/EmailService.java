@@ -21,10 +21,14 @@ public class EmailService {
 	private SendGrid sendGridClient;
 
 	public void cadastroUsuario(Usuario usuario) throws IOException {
-        Mail mail = new Mail(new Email("awilix.com.br"), "Bem vindo ao Awilix!", new Email("pettrus.sherlock@gmail.com"), new Content("text/plain", "texto"));
-        mail.setReplyTo(new Email("abc@gmail.com"));
-        Request request = new Request();
+		Email from = new Email("nao-responda@awilix.com.br");
+		Email para = new Email(usuario.getEmail());
+		String titulo = "Bem vindo ao Awilix!";
+		String mensagem = "Para ativar sua conta acesse o link: https://awilix.com.br/confirmacao-email/" + usuario.getTokenConfirmacao();
+		
+        Mail mail = new Mail(from, titulo, para, new Content("text/plain", mensagem));
         
+        Request request = new Request();
         request.setMethod(Method.POST);
         request.setEndpoint("mail/send");
         request.setBody(mail.build());

@@ -74,6 +74,6 @@ public class AutenticacaoService {
 		
 		repository.save(usuario);
 		
-		//email.cadastroUsuario(usuario);
+		email.cadastroUsuario(usuario);
 	}
 }
