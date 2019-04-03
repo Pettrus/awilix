@@ -50,11 +50,11 @@ public class Horarios implements AbstractEntity {
 	@Column
 	private String fim;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "filme_em_cartaz_id", nullable = false)
 	private FilmeEmCartaz filme;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "cinema_id", nullable = false)
 	private Cinema cinema;
 }

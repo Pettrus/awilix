@@ -1,16 +1,10 @@
 package br.com.awilix.enums;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public enum TipoFilmeEmCartaz {
-	LEGENDADO("Legendado"),
-	DUBLADO("Dublado");
-	
-	private String descricao;
-	
-	TipoFilmeEmCartaz(String descricao) {
-		this.descricao = descricao;
-	}
-	
-	public String getDescricao() {
-		return descricao;
-	}
+	@JsonProperty("Legendado")
+	LEGENDADO,
+	@JsonProperty("Dublado")
+	DUBLADO;
 }
