@@ -47,9 +47,6 @@ public class Horarios implements AbstractEntity {
 	@Column
 	private String inicio;
 	
-	@Column
-	private String fim;
-	
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "filme_em_cartaz_id", nullable = false)
 	private FilmeEmCartaz filme;
