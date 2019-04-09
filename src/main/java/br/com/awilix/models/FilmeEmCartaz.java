@@ -1,10 +1,8 @@
 package br.com.awilix.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +26,11 @@ public class FilmeEmCartaz implements AbstractEntity {
 	
 	@Id
 	@EqualsAndHashCode.Include
-	@JsonProperty(access = Access.WRITE_ONLY)
 	private String imdbId;
+	
+	@Column(nullable = false)
+	private int tmdbId;
+	
+	@Column(nullable = false)
+	private String imagem;
 }
