@@ -6,11 +6,13 @@ import java.util.Set;
 
 import br.com.awilix.models.Horarios;
 import info.movito.themoviedbapi.model.MovieDb;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class HorariosDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;

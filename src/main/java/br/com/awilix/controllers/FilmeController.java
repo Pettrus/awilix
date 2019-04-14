@@ -1,8 +1,5 @@
 package br.com.awilix.controllers;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,43 +8,23 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 import br.com.awilix.services.FilmeService;
-import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/filmes")
+@RequiredArgsConstructor
 public class FilmeController {
+
+	private final FilmeService service;
 	
-	@Autowired
-	private FilmeService service;
-	
-	@GetMapping("/nos-cinemas/{pagina}")
-	public List<MovieDb> nosCinemas(@PathVariable Integer pagina) {
-		return service.nosCinemas(pagina);
+	@GetMapping("/{pagina}")
+	public String listarFilmes(@PathVariable Integer pagina) throws UnirestException {
+		return service.consultarFilmes(pagina).getBody();
 	}
 	
-	@GetMapping("/{filmeId}")
-	public MovieDb detalhes(@PathVariable Integer filmeId) {
-		return service.detalhes(filmeId);
-	}
-	
-	@GetMapping("/popcorn/{imdbId}")
-	public String consultarPopCorn(@PathVariable String imdbId) throws UnirestException {
-		return service.pesquisarPopCornPorImdb(imdbId).getBody();
-	}
-	
-	@GetMapping("/generos")
-	public List<Genre> generos() {
-		return service.consultarGeneros();
-	}
-	
-	@GetMapping("/genero/{id}/{pagina}")
-	public List<MovieDb> listarPorGenero(@PathVariable Integer id, @PathVariable Integer pagina) {
-		return service.pesquisarPorGenero(id, pagina);
-	}
-	
-	@GetMapping("/{nome}/{pagina}")
-	public List<MovieDb> listarPorNome(@PathVariable String nome, @PathVariable Integer pagina) {
-		return service.pesquisarPorNome(nome, pagina);
+	@GetMapping("/imdb/{idImdb}")
+	public MovieDb detalhar(@PathVariable String idImdb) {
+		return service.detalhar(idImdb);
 	}
 }

@@ -1,7 +1,5 @@
 package br.com.awilix.services;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.mashape.unirest.http.HttpResponse;
@@ -10,55 +8,23 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 
 import br.com.awilix.tmdb.TmdbWrapper;
 import info.movito.themoviedbapi.TmdbMovies;
-import info.movito.themoviedbapi.TmdbMovies.MovieMethod;
-import info.movito.themoviedbapi.model.Genre;
+import info.movito.themoviedbapi.TmdbFind.ExternalSource;
+import info.movito.themoviedbapi.model.FindResults;
 import info.movito.themoviedbapi.model.MovieDb;
 
 @Service
 public class FilmeService {
 
-	public List<MovieDb> nosCinemas(Integer pagina) {
-		List<MovieDb> lista = TmdbWrapper.getInstance().getMovies().getNowPlayingMovies("pt-BR", pagina, null).getResults();
-		
-		lista.forEach(filme -> {
-			filme.setReleases(new TmdbMovies.ReleaseInfoResults());
-		});
-		
-		return lista;
+	public HttpResponse<String> consultarFilmes(Integer pagina) throws UnirestException {
+		return Unirest.get("https://tv-v2.api-fetch.website/movies/" + pagina + "?sort=trending").asString();
 	}
 	
-	public MovieDb detalhes(Integer filmeId) {
-		MovieDb filme = TmdbWrapper.getInstance().getMovies().getMovie(filmeId, "pt-BR", MovieMethod.credits, MovieMethod.videos);
+	public MovieDb detalhar(String imdbId) {
+		FindResults pesquisa = TmdbWrapper.getInstance().getFind().find(imdbId, ExternalSource.imdb_id, "pt-BR");
+		MovieDb filme = pesquisa.getMovieResults().get(0);
 		filme.setReleases(new TmdbMovies.ReleaseInfoResults());
+		filme.setCredits(TmdbWrapper.getInstance().getMovies().getCredits(filme.getId()));
 		
 		return filme;
-	}
-	
-	public List<Genre> consultarGeneros() {
-		return TmdbWrapper.getInstance().getGenre().getGenreList("pt-BR");
-	}
-	
-	public List<MovieDb> pesquisarPorGenero(Integer id, Integer pagina) {
-		List<MovieDb> lista = TmdbWrapper.getInstance().getGenre().getGenreMovies(id, "pt-BR", pagina, false).getResults();
-		
-		lista.forEach(filme -> {
-			filme.setReleases(new TmdbMovies.ReleaseInfoResults());
-		});
-		
-		return lista;
-	}
-	
-	public List<MovieDb> pesquisarPorNome(String nome, Integer pagina) {
-		List<MovieDb> lista = TmdbWrapper.getInstance().getSearch().searchMovie(nome, null, "pt-BR", false, pagina).getResults();
-		
-		lista.forEach(filme -> {
-			filme.setReleases(new TmdbMovies.ReleaseInfoResults());
-		});
-		
-		return lista;
-	}
-	
-	public HttpResponse<String> pesquisarPopCornPorImdb(String imdbId) throws UnirestException {
-		return Unirest.get("https://tv-v2.api-fetch.website/movie/" + imdbId).asString();
 	}
 }

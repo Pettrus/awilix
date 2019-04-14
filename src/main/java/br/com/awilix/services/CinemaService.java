@@ -12,6 +12,7 @@ import br.com.awilix.repository.HorariosRepository;
 import br.com.awilix.tmdb.TmdbWrapper;
 import info.movito.themoviedbapi.TmdbMovies;
 import info.movito.themoviedbapi.TmdbFind.ExternalSource;
+import info.movito.themoviedbapi.TmdbMovies.MovieMethod;
 import info.movito.themoviedbapi.model.FindResults;
 import info.movito.themoviedbapi.model.MovieDb;
 import lombok.RequiredArgsConstructor;
@@ -28,23 +29,20 @@ public class CinemaService {
 		return filmeRepository.findAll();
 	}
 	
-	public HorariosDTO horariosFilme(String imdb) {
-		FindResults pesquisa = TmdbWrapper.getInstance().getFind().find(imdb, ExternalSource.imdb_id, "pt-BR");
-		MovieDb filme = pesquisa.getMovieResults().get(0);
+	public HorariosDTO horariosFilme(int tmdbId) {
+		MovieDb filme = TmdbWrapper.getInstance().getMovies().getMovie(tmdbId, "pt-BR", MovieMethod.credits, MovieMethod.videos);
 		filme.setReleases(new TmdbMovies.ReleaseInfoResults());
-		filme.setCredits(TmdbWrapper.getInstance().getMovies().getCredits(filme.getId()));
 		
-		Set<Horarios> lista = horarioRepository.findByFilmeImdbIdOrderByCinemaNomeAscInicioAsc(imdb);
+		Set<Horarios> lista = horarioRepository.findByFilmeTmdbIdOrderByCinemaNomeAscInicioAsc(tmdbId);
 		
-		HorariosDTO dto = new HorariosDTO();
-		dto.setHorarios(lista);
-		dto.setDetalhes(filme);
-		
-		return dto;
+		return new HorariosDTO(filme, lista);
 	}
 	
-	public int retornaIdTmdb(String imdb) {
+	public Integer retornaIdTmdb(String imdb) {
 		FindResults pesquisa = TmdbWrapper.getInstance().getFind().find(imdb, ExternalSource.imdb_id, "pt-BR");
+		
+		if(pesquisa.getMovieResults().isEmpty())
+			return null;
 		
 		return pesquisa.getMovieResults().get(0).getId();
 	}

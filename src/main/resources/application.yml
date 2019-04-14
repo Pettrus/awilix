@@ -25,5 +25,4 @@ spring.mail:
     starttls.enable: true
     starttls.required: true
 
-API_KEY: ${API_KEY}
 spring.sendgrid.api-key: ${SENDGRID_KEY}

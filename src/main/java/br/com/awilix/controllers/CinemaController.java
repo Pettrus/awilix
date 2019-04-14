@@ -24,13 +24,13 @@ public class CinemaController {
 		return service.listarFilmes();
 	}
 	
-	@GetMapping("/{imdb}")
-	public HorariosDTO horariosFilme(@PathVariable String imdb) {
-		return service.horariosFilme(imdb);
+	@GetMapping("/{tmdbId}")
+	public HorariosDTO horariosFilme(@PathVariable int tmdbId) {
+		return service.horariosFilme(tmdbId);
 	}
 	
 	@GetMapping("/tmdb-id/{imdb}")
-	public int tmdbId(@PathVariable String imdb) {
+	public Integer tmdbId(@PathVariable String imdb) {
 		return service.retornaIdTmdb(imdb);
 	}
 }
