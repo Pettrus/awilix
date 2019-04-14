@@ -18,9 +18,19 @@ public class FilmeController {
 
 	private final FilmeService service;
 	
+	@GetMapping("/pesquisa/{keyword}")
+	public String pesquisa(@PathVariable String keyword) throws UnirestException {
+		return service.pesquisar(keyword).getBody();
+	}
+	
 	@GetMapping("/{pagina}")
 	public String listarFilmes(@PathVariable Integer pagina) throws UnirestException {
 		return service.consultarFilmes(pagina).getBody();
+	}
+	
+	@GetMapping("/{pagina}/{genero}")
+	public String listarFilmesPorGenero(@PathVariable Integer pagina, @PathVariable String genero) throws UnirestException {
+		return service.consultarFilmesPorGenero(pagina, genero).getBody();
 	}
 	
 	@GetMapping("/imdb/{idImdb}")

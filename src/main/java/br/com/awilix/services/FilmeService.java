@@ -14,9 +14,18 @@ import info.movito.themoviedbapi.model.MovieDb;
 
 @Service
 public class FilmeService {
+	
+	public HttpResponse<String> pesquisar(String keyword) throws UnirestException {
+		keyword = keyword.replace(" ", "%20");
+		return Unirest.get(System.getenv("FILMES_URL") + "1?sort=trending&keywords=" + keyword).asString();
+	}
 
 	public HttpResponse<String> consultarFilmes(Integer pagina) throws UnirestException {
-		return Unirest.get("https://tv-v2.api-fetch.website/movies/" + pagina + "?sort=trending").asString();
+		return Unirest.get(System.getenv("FILMES_URL") + pagina + "?sort=trending").asString();
+	}
+	
+	public HttpResponse<String> consultarFilmesPorGenero(Integer pagina, String genero) throws UnirestException {
+		return Unirest.get(System.getenv("FILMES_URL") + pagina + "?sort=trending&genre=" + genero).asString();
 	}
 	
 	public MovieDb detalhar(String imdbId) {

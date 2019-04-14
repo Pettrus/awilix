@@ -17,7 +17,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import br.com.awilix.models.FilmeEmCartaz;
 import br.com.awilix.repository.FilmeRepository;
 import br.com.awilix.repository.HorariosRepository;
-import br.com.awilix.tmdb.TmdbWrapper;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CinemaServiceTest {
@@ -28,9 +27,6 @@ public class CinemaServiceTest {
 	@Mock
 	private FilmeRepository filmeRepository;
 	
-	@Mock
-	private TmdbWrapper wrapper;
-
 	@InjectMocks
 	private CinemaService service;
 	
