@@ -2,47 +2,42 @@ package br.com.awilix.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 
+import br.com.awilix.config.SetupTest;
+
 @RunWith(MockitoJUnitRunner.class)
-public class FilmeServiceTest {
+public class FilmeServiceTest extends SetupTest {
 
 	@InjectMocks
 	private FilmeService service;
 	
-	@BeforeEach
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);  
-    }
-	
 	@Test
-	void pesquisar() throws UnirestException {
-		assertThat(service.pesquisar("fdsfsderwuiy").getBody()).isEqualTo("[]");
+	void pesquisarTest() throws UnirestException {
+		assertThat(service.pesquisar("asdasdasdas").getBody()).isEqualTo("[]");
 		
 		assertThat(service.pesquisar("predator")).isNotNull();
 	}
 	
 	@Test
-	void consultarFilmes() throws UnirestException {
+	void consultarFilmesTest() throws UnirestException {
 		assertThat(service.consultarFilmes(1)).isNotNull();
 	}
 	
 	@Test
-	void consultarFilmesPorGenero() throws UnirestException {
-		assertThat(service.consultarFilmesPorGenero(1, "asdasdas").getBody()).isEqualTo("[]");
+	void consultarFilmesPorGeneroTest() throws UnirestException {
+		assertThat(service.consultarFilmesPorGenero(1, "fgfsdfsdfsdfsd").getBody()).isEqualTo("[]");
 		
 		assertThat(service.consultarFilmesPorGenero(1, "action")).isNotNull();
 	}
 	
 	@Test
-	void detalhar() {
+	void detalharTest() {
 		assertThat(service.detalhar("tt2386490")).isNotNull();
 	}
 }

@@ -1,25 +1,26 @@
 package br.com.awilix.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import br.com.awilix.config.SetupTest;
 import br.com.awilix.models.FilmeEmCartaz;
 import br.com.awilix.repository.FilmeRepository;
 import br.com.awilix.repository.HorariosRepository;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CinemaServiceTest {
+public class CinemaServiceTest extends SetupTest {
 	
 	@Mock
 	private HorariosRepository horarioRepository;
@@ -30,16 +31,11 @@ public class CinemaServiceTest {
 	@InjectMocks
 	private CinemaService service;
 	
-	@BeforeEach
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);  
-    }
-	
 	@Test
-	void listarFilmes() {
+	void listarFilmesTest() {
 		Set<FilmeEmCartaz> lista = new HashSet<FilmeEmCartaz>();
-		lista.add(new FilmeEmCartaz("t4123", 12312, "Filme 1"));
-		lista.add(new FilmeEmCartaz("t35435", 3453, "Filme 2"));
+		lista.add(mock(FilmeEmCartaz.class));
+		lista.add(mock(FilmeEmCartaz.class));
 		
 		when(service.listarFilmes()).thenReturn(lista);
 		
@@ -47,12 +43,12 @@ public class CinemaServiceTest {
 	}
 	
 	@Test
-	void horariosFilme() {
-		assertThat(service.horariosFilme(897)).isNotNull();
+	void horariosFilmeTest() {
+		assertNotNull(service.horariosFilme(897));
 	}
 	
 	@Test
-	void retornaIdTmdb() {
-		assertThat(service.retornaIdTmdb("tt2386490")).isNotNull();
+	void retornaIdTmdbTest() {
+		assertNotNull(service.retornaIdTmdb("tt2386490"));
 	}
 }

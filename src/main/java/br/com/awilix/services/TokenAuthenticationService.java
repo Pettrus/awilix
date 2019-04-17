@@ -16,7 +16,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class TokenAuthenticationService {
 
     private static final long EXPIRATIONTIME = 864000000;
-    private static final String SECRET = "MySecreteApp";
+    private static final String SECRET = System.getenv("TOKEN_KEY");
     private static final String TOKEN_PREFIX = "Bearer";
     private static final String HEADER_STRING = "Authorization";
 

@@ -16,8 +16,7 @@ import info.movito.themoviedbapi.model.MovieDb;
 public class FilmeService {
 	
 	public HttpResponse<String> pesquisar(String keyword) throws UnirestException {
-		keyword = keyword.replace(" ", "%20");
-		return Unirest.get(System.getenv("FILMES_URL") + "1?sort=trending&keywords=" + keyword).asString();
+		return Unirest.get(System.getenv("FILMES_URL") + "1?sort=trending&keywords=" + keyword.replace(" ", "%20")).asString();
 	}
 
 	public HttpResponse<String> consultarFilmes(Integer pagina) throws UnirestException {
