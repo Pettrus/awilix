@@ -20,17 +20,17 @@ public class FilmeController {
 	
 	@GetMapping("/pesquisa/{keyword}")
 	public String pesquisa(@PathVariable String keyword) throws UnirestException {
-		return service.pesquisar(keyword).getBody();
+		return service.pesquisar(keyword);
 	}
 	
 	@GetMapping("/{pagina}")
 	public String listarFilmes(@PathVariable Integer pagina) throws UnirestException {
-		return service.consultarFilmes(pagina).getBody();
+		return service.consultarFilmes(pagina);
 	}
 	
 	@GetMapping("/{pagina}/{genero}")
 	public String listarFilmesPorGenero(@PathVariable Integer pagina, @PathVariable String genero) throws UnirestException {
-		return service.consultarFilmesPorGenero(pagina, genero).getBody();
+		return service.consultarFilmesPorGenero(pagina, genero);
 	}
 	
 	@GetMapping("/imdb/{idImdb}")

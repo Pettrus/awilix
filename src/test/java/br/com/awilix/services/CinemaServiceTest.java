@@ -23,10 +23,10 @@ import br.com.awilix.repository.HorariosRepository;
 public class CinemaServiceTest extends SetupTest {
 	
 	@Mock
-	private HorariosRepository horarioRepository;
+	public HorariosRepository horarioRepository;
 	
 	@Mock
-	private FilmeRepository filmeRepository;
+	public FilmeRepository filmeRepository;
 	
 	@InjectMocks
 	private CinemaService service;

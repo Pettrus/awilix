@@ -33,7 +33,7 @@ public class AutenticacaoServiceTest extends SetupTest {
 	private BCryptPasswordEncoder bcryptEnconder;
 	
 	@Mock
-	private EmailService emailService;
+	public EmailService emailService;
 	
 	@InjectMocks
 	private AutenticacaoService service;

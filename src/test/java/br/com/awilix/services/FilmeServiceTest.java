@@ -19,7 +19,7 @@ public class FilmeServiceTest extends SetupTest {
 	
 	@Test
 	void pesquisarTest() throws UnirestException {
-		assertThat(service.pesquisar("asdasdasdas").getBody()).isEqualTo("[]");
+		assertThat(service.pesquisar("asdasdasdas")).isEqualTo("[]");
 		
 		assertThat(service.pesquisar("predator")).isNotNull();
 	}
@@ -31,7 +31,7 @@ public class FilmeServiceTest extends SetupTest {
 	
 	@Test
 	void consultarFilmesPorGeneroTest() throws UnirestException {
-		assertThat(service.consultarFilmesPorGenero(1, "fgfsdfsdfsdfsd").getBody()).isEqualTo("[]");
+		assertThat(service.consultarFilmesPorGenero(1, "fgfsdfsdfsdfsd")).isEqualTo("[]");
 		
 		assertThat(service.consultarFilmesPorGenero(1, "action")).isNotNull();
 	}

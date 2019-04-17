@@ -2,7 +2,6 @@ package br.com.awilix.services;
 
 import org.springframework.stereotype.Service;
 
-import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
@@ -15,16 +14,16 @@ import info.movito.themoviedbapi.model.MovieDb;
 @Service
 public class FilmeService {
 	
-	public HttpResponse<String> pesquisar(String keyword) throws UnirestException {
-		return Unirest.get(System.getenv("FILMES_URL") + "1?sort=trending&keywords=" + keyword.replace(" ", "%20")).asString();
+	public String pesquisar(String keyword) throws UnirestException {
+		return Unirest.get(System.getenv("FILMES_URL") + "1?sort=trending&keywords=" + keyword.replace(" ", "%20")).asString().getBody();
 	}
 
-	public HttpResponse<String> consultarFilmes(Integer pagina) throws UnirestException {
-		return Unirest.get(System.getenv("FILMES_URL") + pagina + "?sort=trending").asString();
+	public String consultarFilmes(Integer pagina) throws UnirestException {
+		return Unirest.get(System.getenv("FILMES_URL") + pagina + "?sort=trending").asString().getBody();
 	}
 	
-	public HttpResponse<String> consultarFilmesPorGenero(Integer pagina, String genero) throws UnirestException {
-		return Unirest.get(System.getenv("FILMES_URL") + pagina + "?sort=trending&genre=" + genero).asString();
+	public String consultarFilmesPorGenero(Integer pagina, String genero) throws UnirestException {
+		return Unirest.get(System.getenv("FILMES_URL") + pagina + "?sort=trending&genre=" + genero).asString().getBody();
 	}
 	
 	public MovieDb detalhar(String imdbId) {
