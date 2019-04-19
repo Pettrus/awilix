@@ -26,5 +26,13 @@ public enum TipoFilmeEmCartaz {
 	@JsonProperty("3D DUB 4DX")
 	DUBLADO_3D_4DX,
 	@JsonProperty("DUB VIP")
-	DUBLADO_VIP;
+	DUBLADO_VIP,
+	@JsonProperty("DUB 4DX")
+	DUBLADO_4DX,
+	@JsonProperty("LEG 4DX")
+	LEGENDADO_4DX,
+	@JsonProperty("DUB IMAX")
+	DUBLADO_IMAX,
+	@JsonProperty("LEG IMAX")
+	LEGENDADO_IMAX;
 }
