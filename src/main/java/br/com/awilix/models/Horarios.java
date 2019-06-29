@@ -2,7 +2,6 @@ package br.com.awilix.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -47,11 +47,12 @@ public class Horarios implements AbstractEntity {
 	@Column
 	private String inicio;
 	
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JsonBackReference
+	@ManyToOne
 	@JoinColumn(name = "filme_em_cartaz_id", nullable = false)
 	private FilmeEmCartaz filme;
 	
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne
 	@JoinColumn(name = "cinema_id", nullable = false)
 	private Cinema cinema;
 }

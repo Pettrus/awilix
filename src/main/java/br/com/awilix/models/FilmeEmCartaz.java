@@ -1,8 +1,16 @@
 package br.com.awilix.models;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +39,31 @@ public class FilmeEmCartaz implements AbstractEntity {
 	@Column(nullable = false)
 	private int tmdbId;
 	
-	@Column(nullable = false)
-	private String imagem;
+	@Column(nullable = false, length = 200)
+	private String titulo;
+	
+	@Column(nullable = true, columnDefinition = "TEXT")
+	private String descricao;
+	
+	@Column(nullable = true)
+	private Float nota;
+	
+	@Column(nullable = true)
+	private LocalDate dataLancamento;
+	
+	@Column(nullable = true)
+	private Integer duracao;
+	
+	@Column(nullable = true)
+	private String poster;
+	
+	@Column(nullable = true)
+	private String backdrop;
+	
+	@Column(nullable = true)
+	private String trailer;
+	
+	@JsonManagedReference
+	@OneToMany(fetch= FetchType.EAGER, cascade=CascadeType.ALL, mappedBy = "filme")
+	private List<Horarios> horarios;
 }

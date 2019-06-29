@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.awilix.dto.HorariosDTO;
 import br.com.awilix.models.FilmeEmCartaz;
 import br.com.awilix.services.CinemaService;
+import info.movito.themoviedbapi.model.MovieDb;
 
 @RestController
 @RequestMapping("/cinema")
@@ -29,8 +30,8 @@ public class CinemaController {
 		return service.horariosFilme(tmdbId);
 	}
 	
-	@GetMapping("/tmdb-id/{imdb}")
-	public Integer tmdbId(@PathVariable String imdb) {
+	@GetMapping("/imdb-id/{imdb}")
+	public MovieDb imdbId(@PathVariable String imdb) {
 		return service.retornaIdTmdb(imdb);
 	}
 }

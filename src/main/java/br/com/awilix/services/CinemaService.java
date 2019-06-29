@@ -38,12 +38,15 @@ public class CinemaService {
 		return new HorariosDTO(filme, lista);
 	}
 	
-	public Integer retornaIdTmdb(String imdb) {
+	public MovieDb retornaIdTmdb(String imdb) {
 		FindResults pesquisa = TmdbWrapper.getInstance().getFind().find(imdb, ExternalSource.imdb_id, "pt-BR");
 		
 		if(pesquisa.getMovieResults().isEmpty())
 			return null;
 		
-		return pesquisa.getMovieResults().get(0).getId();
+		MovieDb filme = TmdbWrapper.getInstance().getMovies().getMovie(pesquisa.getMovieResults().get(0).getId(), "pt-BR", MovieMethod.videos);
+		filme.setReleases(new TmdbMovies.ReleaseInfoResults());
+		
+		return filme;
 	}
 }

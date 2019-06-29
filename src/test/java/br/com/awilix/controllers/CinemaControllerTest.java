@@ -44,11 +44,4 @@ public class CinemaControllerTest extends SetupTest {
 		
 		assertThat(controller.horariosFilme(Mockito.anyInt())).isNotNull();
 	}
-	
-	@Test
-	void tmdbIdTest() {
-		when(service.retornaIdTmdb(Mockito.anyString())).thenReturn(1);
-		
-		assertThat(controller.tmdbId(Mockito.anyString())).isNotNull();
-	}
 }
