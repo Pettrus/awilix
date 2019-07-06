@@ -1,43 +1,37 @@
 package br.com.awilix.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
-
 import br.com.awilix.config.SetupTest;
+import br.com.awilix.models.FilmeEmCartaz;
+import br.com.awilix.repository.FilmeRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FilmeServiceTest extends SetupTest {
 
+	@Mock
+	public FilmeRepository filmeRepository;
+	
 	@InjectMocks
 	private FilmeService service;
 	
 	@Test
-	void pesquisarTest() throws UnirestException {
-		assertThat(service.pesquisar("asdasdasdas")).isEqualTo("[]");
+	void listarFilmesTest() {
+		Set<FilmeEmCartaz> lista = new HashSet<>(List.of(mock(FilmeEmCartaz.class), mock(FilmeEmCartaz.class)));
+		when(filmeRepository.findAll()).thenReturn(lista);
 		
-		assertThat(service.pesquisar("predator")).isNotNull();
-	}
-	
-	@Test
-	void consultarFilmesTest() throws UnirestException {
-		assertThat(service.consultarFilmes(1)).isNotNull();
-	}
-	
-	@Test
-	void consultarFilmesPorGeneroTest() throws UnirestException {
-		assertThat(service.consultarFilmesPorGenero(1, "fgfsdfsdfsdfsd")).isEqualTo("[]");
-		
-		assertThat(service.consultarFilmesPorGenero(1, "action")).isNotNull();
-	}
-	
-	@Test
-	void detalharTest() {
-		assertThat(service.detalhar("tt2386490")).isNotNull();
+		assertThat(service.listarFilmes()).isNotEmpty();
 	}
 }

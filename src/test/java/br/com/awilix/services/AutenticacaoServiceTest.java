@@ -38,7 +38,7 @@ public class AutenticacaoServiceTest extends SetupTest {
 	@InjectMocks
 	private AutenticacaoService service;
 	
-	private Usuario userNovo = new Usuario(Long.valueOf(1), "teste@teste.com", 
+	private Usuario userNovo = new Usuario(new Long(1), "teste@teste.com", 
 			"1234567890", "teste", null, null, new Date(), null, false, null);
 	
 	@Test

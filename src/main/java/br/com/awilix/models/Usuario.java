@@ -4,23 +4,23 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 @Entity(name="usuarios")
 @Getter
@@ -30,14 +30,11 @@ import lombok.ToString;
 @Builder
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Usuario implements AbstractEntity {
-
-	private static final long serialVersionUID = -4999462981232910812L;
-
+public class Usuario {
+	
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
-	@JsonProperty(access = Access.WRITE_ONLY)
 	private Long id;
 	
 	@NotEmpty(message="O campo email é obrigatório")

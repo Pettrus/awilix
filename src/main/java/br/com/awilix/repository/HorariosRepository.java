@@ -1,14 +1,9 @@
 package br.com.awilix.repository;
 
-import java.util.Set;
-
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.CrudRepository;
 
 import br.com.awilix.models.Horarios;
 
-public interface HorariosRepository extends PagingAndSortingRepository<Horarios, Long> {
+public interface HorariosRepository extends CrudRepository<Horarios, Long> {
 
-	Set<Horarios> findByFilmeImdbIdOrderByCinemaNomeAscInicioAsc(String imdb);
-	
-	Set<Horarios> findByFilmeTmdbIdOrderByCinemaNomeAscInicioAsc(int tmdb);
 }

@@ -7,11 +7,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import br.com.awilix.enums.TipoFilmeEmCartaz;
+import br.com.awilix.enums.Linguagem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -20,7 +19,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity(name="horarios")
+@Entity(name="detalhes")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,27 +27,33 @@ import lombok.ToString;
 @Builder
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Horarios {
+public class Detalhes {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
 	
-	@NotNull
 	@Column(nullable = false)
-	private TipoFilmeEmCartaz tipoFilme;
+	private Linguagem linguagem;
+
+	@Column(nullable = false, length = 200)
+	private String titulo;
 	
-	@Column(nullable = false)
-	private String inicio;
+	@Column(nullable = true, columnDefinition = "TEXT")
+	private String descricao;
+	
+	@Column(nullable = true)
+	private String poster;
+	
+	@Column(nullable = true)
+	private String backdrop;
+	
+	@Column(nullable = true)
+	private String trailer;
 	
 	@ManyToOne
-	@JoinColumn(name = "cinema_id", nullable = false)
-	@JsonIgnoreProperties("horarios")
-	private Cinema cinema;
-	
-	@ManyToOne
-	@JoinColumn(name = "filme_id", nullable = false)
-	@JsonIgnoreProperties("horarios")
+	@JoinColumn(name = "filme_em_cartaz_id", nullable = false)
+	@JsonIgnoreProperties("detalhes")
 	private FilmeEmCartaz filme;
 }
