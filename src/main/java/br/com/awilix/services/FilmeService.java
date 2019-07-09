@@ -1,14 +1,12 @@
 package br.com.awilix.services;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
 import br.com.awilix.enums.Linguagem;
 import br.com.awilix.models.FilmeEmCartaz;
 import br.com.awilix.repository.FilmeRepository;
-import br.com.awilix.repository.HorariosRepository;
 import br.com.awilix.tmdb.TmdbWrapper;
 import info.movito.themoviedbapi.TmdbFind.ExternalSource;
 import info.movito.themoviedbapi.TmdbMovies.MovieMethod;
@@ -22,10 +20,8 @@ public class FilmeService {
 	
 	private final FilmeRepository filmeRepository;
 	
-	private final HorariosRepository horariosRepository;
-	
-	public Set<FilmeEmCartaz> listarFilmes() {
-		return filmeRepository.findAll();
+	public List<FilmeEmCartaz> listarFilmes() {
+		return filmeRepository.findByDetalhesLinguagem(Linguagem.PORTUGUES_BRASIL);
 	}
 	
 	public void salvar(List<FilmeEmCartaz> filmes, Linguagem linguagem) {
@@ -39,15 +35,9 @@ public class FilmeService {
 			MovieDb movie = TmdbWrapper.getInstance().getMovies().getMovie(pesquisa.getMovieResults().get(0).getId(), "pt-BR", MovieMethod.videos);
 			filme.preencherComTmdb(movie, linguagem);
 			
-			filmeRepository.save(filme);
-		}	
-	}
-	
-	public void salvarHorarios(List<FilmeEmCartaz> filmes) {
-		for (FilmeEmCartaz filme : filmes) {
 			filme.getHorarios().forEach(h -> h.setFilme(filme));
 			
-			horariosRepository.saveAll(filme.getHorarios());
-		}
+			filmeRepository.save(filme);
+		}	
 	}
 }

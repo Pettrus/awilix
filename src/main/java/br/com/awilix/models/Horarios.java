@@ -14,20 +14,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import br.com.awilix.enums.TipoFilmeEmCartaz;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Entity(name="horarios")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Horarios {
 	
 	@Id

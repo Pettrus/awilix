@@ -4,9 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +27,7 @@ public class FilmeControllerTest extends SetupTest {
 	
 	@Test
 	void filmesEmCartazTest() {
-		Set<FilmeEmCartaz> filmes = new HashSet<FilmeEmCartaz>(List.of(mock(FilmeEmCartaz.class)));
+		List<FilmeEmCartaz> filmes = List.of(mock(FilmeEmCartaz.class));
 		when(service.listarFilmes()).thenReturn(filmes);
 		
 		assertThat(controller.filmesEmCartaz()).isNotEmpty();

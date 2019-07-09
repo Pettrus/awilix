@@ -1,7 +1,6 @@
 package br.com.awilix.services;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -12,6 +11,7 @@ import br.com.awilix.enums.Linguagem;
 import br.com.awilix.models.Cinema;
 import br.com.awilix.models.FilmeEmCartaz;
 import br.com.awilix.repository.CinemaService;
+import br.com.awilix.repository.DetalhesRepository;
 import br.com.awilix.repository.FilmeRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -25,20 +25,22 @@ public class ScrapService {
 	
 	private final CinemaService cinemaService;
 	
+	private final DetalhesRepository detalhesRepository;
+	
 	@Transactional
-	public void verificarSalvarFilme(List<FilmeEmCartaz> filmes, List<Cinema> cinemas, Linguagem linguagem, String cidade) {
+	public List<FilmeEmCartaz> verificarSalvarFilme(List<FilmeEmCartaz> filmes, List<Cinema> cinemas, Linguagem linguagem, String cidade) {
 		List<String> ids = filmes.stream().map(FilmeEmCartaz::getImdbId).collect(Collectors.toList());
 		
-		Set<String> existentes = filmeRepository.findByImdbIdInAndDetalhesLinguagem(ids, linguagem);
-
+		List<String> existentes = filmeRepository.findByImdbIdInAndDetalhesLinguagem(ids, linguagem.ordinal());
+		
 		List<FilmeEmCartaz> filmesNovos = filmes.stream()
-		            .filter(e -> !existentes.contains(e.getImdbId()))
-		            .collect(Collectors.toList());
+	            .filter(e -> !existentes.contains(e.getImdbId()))
+	            .collect(Collectors.toList());
 		
-		//TODO: Enviar email para usuarios sobre filmes novos
-		
-		filmeService.salvar(filmesNovos, linguagem);
+		detalhesRepository.deleteDetalhesByLinguagemFilme(linguagem.ordinal(), ids);
 		cinemaService.substituirCinemas(cinemas, cidade);
-		filmeService.salvarHorarios(filmes);
+		filmeService.salvar(filmes, linguagem);
+		
+		return filmesNovos;
 	}
 }

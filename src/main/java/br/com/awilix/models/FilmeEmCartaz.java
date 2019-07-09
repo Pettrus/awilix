@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -17,19 +16,15 @@ import br.com.awilix.enums.Linguagem;
 import info.movito.themoviedbapi.model.MovieDb;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Entity(name="filmes_em_cartaz")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 public class FilmeEmCartaz {
 
 	public FilmeEmCartaz(String imdbId, int tmdbId) {
@@ -57,7 +52,6 @@ public class FilmeEmCartaz {
 	@Column(nullable = true)
 	private Integer duracao;
 	
-	@Transient
 	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, mappedBy = "filme")
 	@JsonIgnoreProperties("filme")
 	private List<Horarios> horarios;
