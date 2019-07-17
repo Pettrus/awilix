@@ -31,6 +31,7 @@ public class Feed {
 	@Column(nullable = false)
 	private String email;
 
+	@NotNull
 	@Column(nullable = false)
 	private String cidade;
 }

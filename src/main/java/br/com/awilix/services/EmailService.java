@@ -50,27 +50,29 @@ public class EmailService {
 			List<Feed> feeds = feedRepository.findByCidade(cidade);
 			Email from = new Email("nao-responda@awilix.com.br");
 			
-			for (FilmeEmCartaz filme : filmes) {
-				String titulo = filme.getDetalhes().get(0).getTitulo();
-				
-				Context context = new Context();
-				context.setVariable("imagem", "https://image.tmdb.org/t/p/w300/" + filme.getDetalhes().get(0).getPoster());
-				context.setVariable("titulo", titulo);
-				context.setVariable("descricao", filme.getDetalhes().get(0).getDescricao());
-				
-				String html = templateEngine.process("novo-filme", context);
-		        
-				for (Feed feed : feeds) {
-					Email para = new Email(feed.getEmail());
+			if(!feeds.isEmpty()) {
+				for (FilmeEmCartaz filme : filmes) {
+					String titulo = filme.getDetalhes().get(0).getTitulo();
 					
-			        Mail mail = new Mail(from, titulo + " Já nos cinemas!", para, new Content("text/html", html));
+					Context context = new Context();
+					context.setVariable("imagem", "https://image.tmdb.org/t/p/w300/" + filme.getDetalhes().get(0).getPoster());
+					context.setVariable("titulo", titulo);
+					context.setVariable("descricao", filme.getDetalhes().get(0).getDescricao());
+					
+					String html = templateEngine.process("novo-filme", context);
 			        
-			        Request request = new Request();
-			        request.setMethod(Method.POST);
-			        request.setEndpoint("mail/send");
-			        request.setBody(mail.build());
-			        this.sendGridClient.api(request);
-			        
+					for (Feed feed : feeds) {
+						Email para = new Email(feed.getEmail());
+						
+				        Mail mail = new Mail(from, titulo + " Já nos cinemas!", para, new Content("text/html", html));
+				        
+				        Request request = new Request();
+				        request.setMethod(Method.POST);
+				        request.setEndpoint("mail/send");
+				        request.setBody(mail.build());
+				        this.sendGridClient.api(request);
+				        
+					}
 				}
 			}
 		}catch(Exception e) {
