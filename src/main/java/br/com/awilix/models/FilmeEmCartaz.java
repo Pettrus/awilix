@@ -56,7 +56,7 @@ public class FilmeEmCartaz {
 	@JsonIgnoreProperties("filme")
 	private List<Horarios> horarios;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "filme")
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "filme", orphanRemoval = true)
 	@JsonIgnoreProperties("filme")
 	private List<Detalhes> detalhes;
 	

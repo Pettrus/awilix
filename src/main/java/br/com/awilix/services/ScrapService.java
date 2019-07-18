@@ -40,6 +40,7 @@ public class ScrapService {
 		detalhesRepository.deleteDetalhesByLinguagemFilme(linguagem.ordinal(), ids);
 		cinemaService.substituirCinemas(cinemas, cidade);
 		filmeService.salvar(filmes, linguagem);
+		detalhesRepository.deleteFilmeSemHorario();
 		
 		return filmesNovos;
 	}
