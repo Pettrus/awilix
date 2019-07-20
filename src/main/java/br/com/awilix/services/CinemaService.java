@@ -1,10 +1,11 @@
-package br.com.awilix.repository;
+package br.com.awilix.services;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import br.com.awilix.models.Cinema;
+import br.com.awilix.repository.CinemaRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -13,10 +14,8 @@ public class CinemaService {
 	
 	private final CinemaRepository cinemaRepository;
 	
-	public void substituirCinemas(List<Cinema> cinemas, String cidade) {
-		cinemaRepository.deleteFromCinemasWhereCidade(cidade);
-		cinemas.stream().forEach(c -> c.setCidade(cidade));
-		
+	public void atualizarCinemas(List<Cinema> cinemas, String cidade) {
+		cinemaRepository.deleteByCidade(cidade);
 		cinemaRepository.saveAll(cinemas);
 	}
 }

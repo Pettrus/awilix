@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import br.com.awilix.config.SetupTest;
-import br.com.awilix.models.FilmeEmCartaz;
+import br.com.awilix.models.Filme;
 import br.com.awilix.services.FilmeService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -27,7 +27,7 @@ public class FilmeControllerTest extends SetupTest {
 	
 	@Test
 	void filmesEmCartazTest() {
-		List<FilmeEmCartaz> filmes = List.of(mock(FilmeEmCartaz.class));
+		List<Filme> filmes = List.of(mock(Filme.class));
 		when(service.listarFilmes()).thenReturn(filmes);
 		
 		assertThat(controller.filmesEmCartaz()).isNotEmpty();

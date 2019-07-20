@@ -2,9 +2,6 @@ package br.com.awilix.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 
 import br.com.awilix.config.SetupTest;
 import br.com.awilix.dto.ScrapDTO;
-import br.com.awilix.models.FilmeEmCartaz;
 import br.com.awilix.services.EmailService;
 import br.com.awilix.services.ScrapService;
 
@@ -35,10 +31,6 @@ public class ScrapControllerTest extends SetupTest {
 	@Test
 	void deveriaVerificarSalvarNovo() {
 		ScrapDTO scrap = mock(ScrapDTO.class);
-		List<FilmeEmCartaz> filmes = List.of(mock(FilmeEmCartaz.class), mock(FilmeEmCartaz.class));
-		
-		when(service.verificarSalvarFilme(scrap.getFilmes(), scrap.getCinemas(), scrap.getLinguagem(), scrap.getCidade()))
-			.thenReturn(filmes);
 		
 		assertEquals(controller.verificarNovoESalvar(scrap), new ResponseEntity<>(HttpStatus.OK));
 	}

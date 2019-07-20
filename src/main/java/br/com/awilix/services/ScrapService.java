@@ -7,11 +7,11 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import br.com.awilix.dto.ScrapDTO;
 import br.com.awilix.enums.Linguagem;
-import br.com.awilix.models.Cinema;
-import br.com.awilix.models.FilmeEmCartaz;
-import br.com.awilix.repository.CinemaService;
+import br.com.awilix.models.Filme;
 import br.com.awilix.repository.DetalhesRepository;
+import br.com.awilix.repository.FilmeCinemaRepository;
 import br.com.awilix.repository.FilmeRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -27,20 +27,25 @@ public class ScrapService {
 	
 	private final DetalhesRepository detalhesRepository;
 	
+	private final FilmeCinemaRepository fcRepository;
+	
 	@Transactional
-	public List<FilmeEmCartaz> verificarSalvarFilme(List<FilmeEmCartaz> filmes, List<Cinema> cinemas, Linguagem linguagem, String cidade) {
-		List<String> ids = filmes.stream().map(FilmeEmCartaz::getImdbId).collect(Collectors.toList());
+	public void atualizarFilmes(ScrapDTO scrap) {
+		fcRepository.deleteByCinemaCidade(scrap.getCidade());
+		cinemaService.atualizarCinemas(scrap.getCinemas(), scrap.getCidade());
+		filmeService.salvar(scrap.getFilmes(), scrap.getLinguagem());
+		filmeService.salvarFilmeCinema(scrap.getFilmeCinemas());
+		detalhesRepository.deleteFilmeSemHorario();
+	}
+	
+	public List<Filme> encontrarFilmesNovos(List<Filme> filmes, Linguagem linguagem) {
+		List<String> ids = filmes.stream().map(Filme::getImdbId).collect(Collectors.toList());
 		
 		List<String> existentes = filmeRepository.findByImdbIdInAndDetalhesLinguagem(ids, linguagem.ordinal());
 		
-		List<FilmeEmCartaz> filmesNovos = filmes.stream()
+		List<Filme> filmesNovos = filmes.stream()
 	            .filter(e -> !existentes.contains(e.getImdbId()))
 	            .collect(Collectors.toList());
-		
-		detalhesRepository.deleteDetalhesByLinguagemFilme(linguagem.ordinal(), ids);
-		cinemaService.substituirCinemas(cinemas, cidade);
-		filmeService.salvar(filmes, linguagem);
-		detalhesRepository.deleteFilmeSemHorario();
 		
 		return filmesNovos;
 	}

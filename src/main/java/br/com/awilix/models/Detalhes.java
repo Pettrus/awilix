@@ -48,7 +48,7 @@ public class Detalhes {
 	private String trailer;
 	
 	@ManyToOne
-	@JoinColumn(name = "filme_em_cartaz_id", nullable = false)
+	@JoinColumn(name = "filme_id", nullable = false)
 	@JsonIgnoreProperties("detalhes")
-	private FilmeEmCartaz filme;
+	private Filme filme;
 }

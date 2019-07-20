@@ -20,17 +20,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Entity(name="filmes_em_cartaz")
+@Entity(name="filmes")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FilmeEmCartaz {
-
-	public FilmeEmCartaz(String imdbId, int tmdbId) {
-		this.imdbId = imdbId;
-		this.tmdbId = tmdbId;
-	}
+public class Filme {
 	
 	@Id
 	@EqualsAndHashCode.Include
@@ -52,9 +47,9 @@ public class FilmeEmCartaz {
 	@Column(nullable = true)
 	private Integer duracao;
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, mappedBy = "filme")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "filme")
 	@JsonIgnoreProperties("filme")
-	private List<Horarios> horarios;
+	private List<FilmeCinema> filmeCinemas;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "filme", orphanRemoval = true)
 	@JsonIgnoreProperties("filme")

@@ -15,7 +15,7 @@ import com.sendgrid.Request;
 import com.sendgrid.SendGrid;
 
 import br.com.awilix.models.Feed;
-import br.com.awilix.models.FilmeEmCartaz;
+import br.com.awilix.models.Filme;
 import br.com.awilix.models.Usuario;
 import br.com.awilix.repository.FeedRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,13 +45,13 @@ public class EmailService {
         this.sendGridClient.api(request);
 	}
 	
-	public void notificarFilmesNovos(List<FilmeEmCartaz> filmes, String cidade) {
+	public void notificarFilmesNovos(List<Filme> filmes, String cidade) {
 		try {
 			List<Feed> feeds = feedRepository.findByCidade(cidade);
 			Email from = new Email("nao-responda@awilix.com.br");
 			
 			if(!feeds.isEmpty()) {
-				for (FilmeEmCartaz filme : filmes) {
+				for (Filme filme : filmes) {
 					String titulo = filme.getDetalhes().get(0).getTitulo();
 					
 					Context context = new Context();

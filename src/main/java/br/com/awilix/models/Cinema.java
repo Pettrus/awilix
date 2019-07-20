@@ -2,10 +2,8 @@ package br.com.awilix.models;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
@@ -39,7 +37,7 @@ public class Cinema {
 	@Column(nullable = false)
 	private String cidade;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "cinema")
+	@OneToMany(mappedBy = "cinema")
 	@JsonIgnoreProperties("cinema")
-	private List<Horarios> horarios;
+	private List<FilmeCinema> filmeCinemas;
 }

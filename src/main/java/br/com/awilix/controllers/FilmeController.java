@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.awilix.models.FilmeEmCartaz;
+import br.com.awilix.models.Filme;
 import br.com.awilix.services.FilmeService;
 
 @RestController
@@ -18,7 +18,7 @@ public class FilmeController {
 	private FilmeService service;
 	
 	@GetMapping
-	public List<FilmeEmCartaz> filmesEmCartaz() {
+	public List<Filme> filmesEmCartaz() {
 		return service.listarFilmes();
 	}
 }

@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 
 import br.com.awilix.enums.Linguagem;
 import br.com.awilix.exception.GeneralException;
-import br.com.awilix.models.FilmeEmCartaz;
+import br.com.awilix.models.Filme;
+import br.com.awilix.models.FilmeCinema;
+import br.com.awilix.repository.FilmeCinemaRepository;
 import br.com.awilix.repository.FilmeRepository;
 import info.movito.themoviedbapi.TmdbMovies.MovieMethod;
 import info.movito.themoviedbapi.model.MovieDb;
@@ -20,12 +22,14 @@ public class FilmeService {
 	
 	private final TmdbService tmdbService;
 	
-	public List<FilmeEmCartaz> listarFilmes() {
+	private final FilmeCinemaRepository fcRepository;
+	
+	public List<Filme> listarFilmes() {
 		return filmeRepository.findByDetalhesLinguagem(Linguagem.PORTUGUES_BRASIL);
 	}
 	
-	public void salvar(List<FilmeEmCartaz> filmes, Linguagem linguagem) {
-		for (FilmeEmCartaz filme : filmes) {
+	public void salvar(List<Filme> filmes, Linguagem linguagem) {
+		for (Filme filme : filmes) {
 			Integer id = tmdbService.pesquisarIdPortImdb(filme.getImdbId(), linguagem);
 			
 			if(id == null) {
@@ -35,9 +39,17 @@ public class FilmeService {
 			MovieDb movie = tmdbService.carregarCategoriaPorFilmeId(id, "pt-BR", MovieMethod.videos);
 			filme.preencherComTmdb(movie, linguagem);
 			
-			filme.getHorarios().forEach(h -> h.setFilme(filme));
-			
 			filmeRepository.save(filme);
 		}	
+	}
+	
+	public void salvarFilmeCinema(List<FilmeCinema> filmeCinema) {
+		filmeCinema.forEach(fc -> {
+			fc.getHorarios().forEach(h -> {
+				h.setFilmeCinema(fc);
+			});
+		});
+		
+		fcRepository.saveAll(filmeCinema);
 	}
 }

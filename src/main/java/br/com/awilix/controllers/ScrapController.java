@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.awilix.dto.ScrapDTO;
-import br.com.awilix.models.FilmeEmCartaz;
+import br.com.awilix.models.Filme;
 import br.com.awilix.services.EmailService;
 import br.com.awilix.services.ScrapService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,9 @@ public class ScrapController {
 
 	@PostMapping
 	public ResponseEntity<?> verificarNovoESalvar(@RequestBody ScrapDTO scrap) {
-		List<FilmeEmCartaz> filmesNovos = service.verificarSalvarFilme(scrap.getFilmes(), scrap.getCinemas(), scrap.getLinguagem(), scrap.getCidade());
+		List<Filme> filmesNovos = service.encontrarFilmesNovos(scrap.getFilmes(), scrap.getLinguagem());
+		
+		service.atualizarFilmes(scrap);
 		emailService.notificarFilmesNovos(filmesNovos, scrap.getCidade());
 		
 		return new ResponseEntity<>(HttpStatus.OK);

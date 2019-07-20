@@ -9,8 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import br.com.awilix.enums.TipoFilmeEmCartaz;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,12 +36,6 @@ public class Horarios {
 	private String inicio;
 	
 	@ManyToOne
-	@JoinColumn(name = "cinema_id", nullable = false)
-	@JsonIgnoreProperties("horarios")
-	private Cinema cinema;
-	
-	@ManyToOne
-	@JoinColumn(name = "filme_id", nullable = false)
-	@JsonIgnoreProperties("horarios")
-	private FilmeEmCartaz filme;
+	@JoinColumn(name = "filme_cinema_id", nullable = false)
+	private FilmeCinema filmeCinema;
 }

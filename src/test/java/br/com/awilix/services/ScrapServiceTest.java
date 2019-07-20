@@ -14,10 +14,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import br.com.awilix.config.SetupTest;
 import br.com.awilix.enums.Linguagem;
-import br.com.awilix.models.Cinema;
-import br.com.awilix.models.FilmeEmCartaz;
-import br.com.awilix.repository.CinemaService;
+import br.com.awilix.models.Filme;
 import br.com.awilix.repository.DetalhesRepository;
+import br.com.awilix.repository.FilmeCinemaRepository;
 import br.com.awilix.repository.FilmeRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -27,29 +26,23 @@ public class ScrapServiceTest extends SetupTest {
 	private FilmeRepository filmeRepository;
 	
 	@Mock
-	private FilmeService filmeService;
-	
-	@Mock
-	private CinemaService cinemaService;
-	
-	@Mock
 	private DetalhesRepository detalhesRepository;
-
+	
+	@Mock
+	private FilmeCinemaRepository fcRepository;
+	
 	@InjectMocks
 	private ScrapService service;
 	
 	@Test
-	void deveriaVerificarSalvarFilme() {
-		List<FilmeEmCartaz> filmes = List.of(mock(FilmeEmCartaz.class));
-		List<String> filmeIds = List.of("1");
-		List<Cinema> cinemas = List.of(mock(Cinema.class));
+	void deveriaRetornarFilmesNovos() {
+		List<Filme> filmes = List.of(mock(Filme.class), mock(Filme.class));
 		Linguagem linguagem = Linguagem.PORTUGUES_BRASIL;
-		String cidade = "Fortaleza";
+		List<String> ids = List.of("1", "2");
 		
-		when(filmeRepository.findByImdbIdInAndDetalhesLinguagem(filmeIds, linguagem.ordinal()))
-			.thenReturn(List.of("2"));
+		when(filmeRepository.findByImdbIdInAndDetalhesLinguagem(ids, linguagem.ordinal()))
+		.thenReturn(List.of("2"));
 		
-		assertThat(service.verificarSalvarFilme(filmes, cinemas, linguagem, cidade))
-			.isEqualTo(filmes);
+		assertThat(service.encontrarFilmesNovos(filmes, linguagem)).isNotEmpty();
 	}
 }

@@ -18,7 +18,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import br.com.awilix.config.SetupTest;
 import br.com.awilix.enums.Linguagem;
 import br.com.awilix.exception.GeneralException;
-import br.com.awilix.models.FilmeEmCartaz;
+import br.com.awilix.models.Filme;
 import br.com.awilix.repository.FilmeRepository;
 import info.movito.themoviedbapi.TmdbMovies.MovieMethod;
 import info.movito.themoviedbapi.model.MovieDb;
@@ -37,14 +37,14 @@ public class FilmeServiceTest extends SetupTest {
 	
 	@Test
 	void listarFilmesTest() {
-		when(filmeRepository.findByDetalhesLinguagem(Linguagem.PORTUGUES_BRASIL)).thenReturn(List.of(mock(FilmeEmCartaz.class)));
+		when(filmeRepository.findByDetalhesLinguagem(Linguagem.PORTUGUES_BRASIL)).thenReturn(List.of(mock(Filme.class)));
 		
 		assertThat(service.listarFilmes()).isNotEmpty();
 	}
 	
 	@Test
 	void deveriaSalvar() {
-		FilmeEmCartaz filme = mock(FilmeEmCartaz.class);
+		Filme filme = mock(Filme.class);
 		Linguagem linguagem = Linguagem.PORTUGUES_BRASIL;
 		
 		when(tmdbService.pesquisarIdPortImdb(filme.getImdbId(), linguagem)).thenReturn(null);
