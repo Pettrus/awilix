@@ -1,37 +1,55 @@
 package br.com.awilix.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-
-import br.com.awilix.tmdb.TmdbWrapper;
-import info.movito.themoviedbapi.TmdbMovies;
-import info.movito.themoviedbapi.TmdbFind.ExternalSource;
-import info.movito.themoviedbapi.model.FindResults;
+import br.com.awilix.enums.Linguagem;
+import br.com.awilix.exception.GeneralException;
+import br.com.awilix.models.Filme;
+import br.com.awilix.models.FilmeCinema;
+import br.com.awilix.repository.FilmeCinemaRepository;
+import br.com.awilix.repository.FilmeRepository;
+import info.movito.themoviedbapi.TmdbMovies.MovieMethod;
 import info.movito.themoviedbapi.model.MovieDb;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class FilmeService {
 	
-	public String pesquisar(String keyword) throws UnirestException {
-		return Unirest.get(System.getenv("FILMES_URL") + "1?sort=trending&keywords=" + keyword.replace(" ", "%20")).asString().getBody();
-	}
-
-	public String consultarFilmes(Integer pagina) throws UnirestException {
-		return Unirest.get(System.getenv("FILMES_URL") + pagina + "?sort=trending").asString().getBody();
+	private final FilmeRepository filmeRepository;
+	
+	private final TmdbService tmdbService;
+	
+	private final FilmeCinemaRepository fcRepository;
+	
+	public List<Filme> listarFilmes() {
+		return filmeRepository.findByDetalhesLinguagem(Linguagem.PORTUGUES_BRASIL);
 	}
 	
-	public String consultarFilmesPorGenero(Integer pagina, String genero) throws UnirestException {
-		return Unirest.get(System.getenv("FILMES_URL") + pagina + "?sort=trending&genre=" + genero).asString().getBody();
+	public void salvar(List<Filme> filmes, Linguagem linguagem) {
+		for (Filme filme : filmes) {
+			Integer id = tmdbService.pesquisarIdPortImdb(filme.getImdbId(), linguagem);
+			
+			if(id == null) {
+				throw new GeneralException("Filme não encontrado");
+			}
+			
+			MovieDb movie = tmdbService.carregarCategoriaPorFilmeId(id, "pt-BR", MovieMethod.videos);
+			filme.preencherComTmdb(movie, linguagem);
+			
+			filmeRepository.save(filme);
+		}	
 	}
 	
-	public MovieDb detalhar(String imdbId) {
-		FindResults pesquisa = TmdbWrapper.getInstance().getFind().find(imdbId, ExternalSource.imdb_id, "pt-BR");
-		MovieDb filme = pesquisa.getMovieResults().get(0);
-		filme.setReleases(new TmdbMovies.ReleaseInfoResults());
-		filme.setCredits(TmdbWrapper.getInstance().getMovies().getCredits(filme.getId()));
+	public void salvarFilmeCinema(List<FilmeCinema> filmeCinema) {
+		filmeCinema.forEach(fc -> {
+			fc.getHorarios().forEach(h -> {
+				h.setFilmeCinema(fc);
+			});
+		});
 		
-		return filme;
+		fcRepository.saveAll(filmeCinema);
 	}
 }

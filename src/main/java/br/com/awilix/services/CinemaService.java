@@ -1,52 +1,21 @@
 package br.com.awilix.services;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import br.com.awilix.dto.HorariosDTO;
-import br.com.awilix.models.FilmeEmCartaz;
-import br.com.awilix.models.Horarios;
-import br.com.awilix.repository.FilmeRepository;
-import br.com.awilix.repository.HorariosRepository;
-import br.com.awilix.tmdb.TmdbWrapper;
-import info.movito.themoviedbapi.TmdbMovies;
-import info.movito.themoviedbapi.TmdbFind.ExternalSource;
-import info.movito.themoviedbapi.TmdbMovies.MovieMethod;
-import info.movito.themoviedbapi.model.FindResults;
-import info.movito.themoviedbapi.model.MovieDb;
+import br.com.awilix.models.Cinema;
+import br.com.awilix.repository.CinemaRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class CinemaService {
 	
-	private final HorariosRepository horarioRepository;
-
-	private final FilmeRepository filmeRepository;
+	private final CinemaRepository cinemaRepository;
 	
-	public Set<FilmeEmCartaz> listarFilmes() {
-		return filmeRepository.findAll();
-	}
-	
-	public HorariosDTO horariosFilme(int tmdbId) {
-		MovieDb filme = TmdbWrapper.getInstance().getMovies().getMovie(tmdbId, "pt-BR", MovieMethod.credits, MovieMethod.videos);
-		filme.setReleases(new TmdbMovies.ReleaseInfoResults());
-		
-		Set<Horarios> lista = horarioRepository.findByFilmeTmdbIdOrderByCinemaNomeAscInicioAsc(tmdbId);
-		
-		return new HorariosDTO(filme, lista);
-	}
-	
-	public MovieDb retornaIdTmdb(String imdb) {
-		FindResults pesquisa = TmdbWrapper.getInstance().getFind().find(imdb, ExternalSource.imdb_id, "pt-BR");
-		
-		if(pesquisa.getMovieResults().isEmpty())
-			return null;
-		
-		MovieDb filme = TmdbWrapper.getInstance().getMovies().getMovie(pesquisa.getMovieResults().get(0).getId(), "pt-BR", MovieMethod.videos);
-		filme.setReleases(new TmdbMovies.ReleaseInfoResults());
-		
-		return filme;
+	public void atualizarCinemas(List<Cinema> cinemas, String cidade) {
+		cinemaRepository.deleteByCidade(cidade);
+		cinemaRepository.saveAll(cinemas);
 	}
 }

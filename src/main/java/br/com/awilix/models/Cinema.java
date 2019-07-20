@@ -1,42 +1,43 @@
 package br.com.awilix.models;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 @Entity(name="cinemas")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Cinema implements AbstractEntity {
-
-	private static final long serialVersionUID = -4469180716297158003L;
+public class Cinema {
 
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	@JsonProperty(access = Access.WRITE_ONLY)
-	private Long id;
+	private String id;
 	
 	@NotNull
 	@Column(nullable=false)
 	private String nome;
+	
+	@Column(nullable = false)
+	private String cidade;
+	
+	@OneToMany(mappedBy = "cinema")
+	@JsonIgnoreProperties("cinema")
+	private List<FilmeCinema> filmeCinemas;
 }

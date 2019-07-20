@@ -13,6 +13,8 @@ spring.datasource:
 logging:
   level:
     org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl: ERROR
+  path:
+    ${LOG_LOCATION:./}
 
 spring.mail:
   host: email-smtp.us-west-2.amazonaws.com

@@ -5,37 +5,33 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-import br.com.awilix.enums.TipoFilmeEmCartaz;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Entity(name="horarios")
+@Entity(name="feed")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Horarios {
+public class Feed {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
 	
+	@Email
 	@NotNull
 	@Column(nullable = false)
-	private TipoFilmeEmCartaz tipoFilme;
-	
+	private String email;
+
+	@NotNull
 	@Column(nullable = false)
-	private String inicio;
-	
-	@ManyToOne
-	@JoinColumn(name = "filme_cinema_id", nullable = false)
-	private FilmeCinema filmeCinema;
+	private String cidade;
 }
