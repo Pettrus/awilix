@@ -31,6 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/filmes/**").permitAll()
 			.antMatchers("/scrap/**").permitAll()
 			.antMatchers("/feed/**").permitAll()
+			.antMatchers("/fcm/**").permitAll()
 			.anyRequest().authenticated()
 			.and()
 			

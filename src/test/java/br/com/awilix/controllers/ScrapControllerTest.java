@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import br.com.awilix.config.SetupTest;
 import br.com.awilix.dto.ScrapDTO;
 import br.com.awilix.services.EmailService;
+import br.com.awilix.services.FcmService;
 import br.com.awilix.services.ScrapService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -24,6 +25,9 @@ public class ScrapControllerTest extends SetupTest {
 	
 	@Mock
 	private EmailService emailService;
+	
+	@Mock
+	private FcmService fcmService;
 	
 	@InjectMocks
 	private ScrapController controller;
