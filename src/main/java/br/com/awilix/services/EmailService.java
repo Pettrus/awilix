@@ -59,9 +59,10 @@ public class EmailService {
 					context.setVariable("titulo", titulo);
 					context.setVariable("descricao", filme.getDetalhes().get(0).getDescricao());
 					
-					String html = templateEngine.process("novo-filme", context);
-			        
 					for (Feed feed : feeds) {
+						context.setVariable("email", feed.getEmail());
+						String html = templateEngine.process("novo-filme", context);
+						
 						Email para = new Email(feed.getEmail());
 						
 				        Mail mail = new Mail(from, titulo + " Já nos cinemas!", para, new Content("text/html", html));
