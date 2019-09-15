@@ -33,8 +33,8 @@ public class ScrapService {
 	public void atualizarFilmes(ScrapDTO scrap) {
 		fcRepository.deleteByCinemaCidade(scrap.getCidade());
 		cinemaService.atualizarCinemas(scrap.getCinemas(), scrap.getCidade());
-		filmeService.salvar(scrap.getFilmes(), scrap.getLinguagem());
-		filmeService.salvarFilmeCinema(scrap.getFilmeCinemas());
+		List<String> semId = filmeService.salvar(scrap.getFilmes(), scrap.getLinguagem());
+		filmeService.salvarFilmeCinema(scrap.getFilmeCinemas(), semId);
 		detalhesRepository.deleteFilmeSemHorario();
 	}
 	

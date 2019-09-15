@@ -1,11 +1,11 @@
 package br.com.awilix.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import br.com.awilix.enums.Linguagem;
-import br.com.awilix.exception.GeneralException;
 import br.com.awilix.models.Filme;
 import br.com.awilix.models.FilmeCinema;
 import br.com.awilix.repository.FilmeCinemaRepository;
@@ -24,31 +24,43 @@ public class FilmeService {
 	
 	private final FilmeCinemaRepository fcRepository;
 	
-	public List<Filme> listarFilmes() {
-		return filmeRepository.findByDetalhesLinguagem(Linguagem.PORTUGUES_BRASIL);
+	public List<Filme> listarFilmes(Linguagem linguagem) {
+		return filmeRepository.findByDetalhesLinguagem(linguagem);
 	}
 	
-	public void salvar(List<Filme> filmes, Linguagem linguagem) {
+	public List<String> salvar(List<Filme> filmes, Linguagem linguagem) {
+		List<String> semId = new ArrayList<String>();
+		
 		for (Filme filme : filmes) {
 			Integer id = tmdbService.pesquisarIdPortImdb(filme.getImdbId(), linguagem);
 			
-			if(id == null) {
-				throw new GeneralException("Filme não encontrado");
+			if(id != null) {
+				MovieDb movie = tmdbService.carregarCategoriaPorFilmeId(id, "pt-BR", MovieMethod.videos);
+				filme.preencherComTmdb(movie, linguagem);
+				
+				filmeRepository.save(filme);
+			}else {
+				semId.add(filme.getImdbId());
 			}
-			
-			MovieDb movie = tmdbService.carregarCategoriaPorFilmeId(id, "pt-BR", MovieMethod.videos);
-			filme.preencherComTmdb(movie, linguagem);
-			
-			filmeRepository.save(filme);
-		}	
+		}
+		
+		return semId;
 	}
 	
-	public void salvarFilmeCinema(List<FilmeCinema> filmeCinema) {
+	public void salvarFilmeCinema(List<FilmeCinema> filmeCinema, List<String> semId) {
+		List<FilmeCinema> remover = new ArrayList<FilmeCinema>();
+		
 		filmeCinema.forEach(fc -> {
-			fc.getHorarios().forEach(h -> {
-				h.setFilmeCinema(fc);
-			});
+			if(semId.contains(fc.getFilme().getImdbId())) {
+				remover.add(fc);
+			}else {
+				fc.getHorarios().forEach(h -> {
+					h.setFilmeCinema(fc);
+				});
+			}
 		});
+		
+		filmeCinema.removeAll(remover);
 		
 		fcRepository.saveAll(filmeCinema);
 	}

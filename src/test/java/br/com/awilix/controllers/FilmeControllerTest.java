@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import br.com.awilix.config.SetupTest;
+import br.com.awilix.enums.Linguagem;
 import br.com.awilix.models.Filme;
 import br.com.awilix.services.FilmeService;
 
@@ -28,8 +29,8 @@ public class FilmeControllerTest extends SetupTest {
 	@Test
 	void filmesEmCartazTest() {
 		List<Filme> filmes = List.of(mock(Filme.class));
-		when(service.listarFilmes()).thenReturn(filmes);
+		when(service.listarFilmes(Linguagem.PORTUGUES)).thenReturn(filmes);
 		
-		assertThat(controller.filmesEmCartaz()).isNotEmpty();
+		assertThat(controller.filmesEmCartaz(Linguagem.PORTUGUES)).isNotEmpty();
 	}
 }

@@ -39,7 +39,7 @@ public class FilmeServiceTest extends SetupTest {
 	void listarFilmesTest() {
 		when(filmeRepository.findByDetalhesLinguagem(Linguagem.PORTUGUES_BRASIL)).thenReturn(List.of(mock(Filme.class)));
 		
-		assertThat(service.listarFilmes()).isNotEmpty();
+		assertThat(service.listarFilmes(Linguagem.PORTUGUES_BRASIL)).isNotEmpty();
 	}
 	
 	@Test
@@ -48,7 +48,6 @@ public class FilmeServiceTest extends SetupTest {
 		Linguagem linguagem = Linguagem.PORTUGUES_BRASIL;
 		
 		when(tmdbService.pesquisarIdPortImdb(filme.getImdbId(), linguagem)).thenReturn(null);
-		assertThrows(GeneralException.class, () -> service.salvar(List.of(filme), linguagem));
 		
 		when(tmdbService.pesquisarIdPortImdb(filme.getImdbId(), linguagem)).thenReturn(1);
 		when(tmdbService.carregarCategoriaPorFilmeId(1, "pt-BR", MovieMethod.videos)).thenReturn(mock(MovieDb.class));

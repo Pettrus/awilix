@@ -16,7 +16,8 @@ public class TmdbService {
 	private TmdbApi api = new TmdbApi(System.getenv("API_KEY"));
 	
 	public Integer pesquisarIdPortImdb(String imdbId, Linguagem linguagem) {
-		List<MovieDb> lista = api.getFind().find(imdbId, ExternalSource.imdb_id, linguagem.toString()).getMovieResults();
+		List<MovieDb> lista = api.getFind().find(imdbId, ExternalSource.imdb_id, 
+				(linguagem.equals(Linguagem.PORTUGUES_BRASIL)  ? "pt-BR" : "pt-PT")).getMovieResults();
 		
 		if(lista.isEmpty())
 			return null;
