@@ -2,6 +2,8 @@ package br.com.awilix.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -28,35 +30,42 @@ public class FilmeService {
 		return filmeRepository.findByDetalhesLinguagem(linguagem);
 	}
 	
-	public List<String> salvar(List<Filme> filmes, Linguagem linguagem) {
-		List<String> semId = new ArrayList<String>();
+	public List<Filme> preencherDadosFilmes(List<Filme> filmes, Linguagem linguagem) {
+		List<Filme> filmesFormatados = new ArrayList<Filme>();
 		
 		for (Filme filme : filmes) {
 			Integer id = tmdbService.pesquisarIdPortImdb(filme.getImdbId(), linguagem);
 			
 			if(id != null) {
-				MovieDb movie = tmdbService.carregarCategoriaPorFilmeId(id, "pt-BR", MovieMethod.videos);
+				MovieDb movie = tmdbService.carregarCategoriaPorFilmeId(id, 
+						(linguagem.equals(Linguagem.PORTUGUES_BRASIL)  ? "pt-BR" : "pt-PT"), MovieMethod.videos);
 				filme.preencherComTmdb(movie, linguagem);
-				
 				filmeRepository.save(filme);
-			}else {
-				semId.add(filme.getImdbId());
+				
+				filmesFormatados.add(filme);
 			}
 		}
 		
-		return semId;
+		return filmesFormatados;
 	}
 	
-	public void salvarFilmeCinema(List<FilmeCinema> filmeCinema, List<String> semId) {
+	public void salvar(List<Filme> filmes) {
+		filmeRepository.saveAll(filmes);
+	}
+	
+	public void salvarFilmeCinema(List<FilmeCinema> filmeCinema, List<Filme> filmes) {
 		List<FilmeCinema> remover = new ArrayList<FilmeCinema>();
+		Set<String> ids = filmes.stream()
+		        .map(Filme::getImdbId)
+		        .collect(Collectors.toSet());
 		
 		filmeCinema.forEach(fc -> {
-			if(semId.contains(fc.getFilme().getImdbId())) {
-				remover.add(fc);
-			}else {
+			if(ids.contains(fc.getFilme().getImdbId())) {
 				fc.getHorarios().forEach(h -> {
 					h.setFilmeCinema(fc);
 				});
+			}else {
+				remover.add(fc);
 			}
 		});
 		

@@ -30,12 +30,17 @@ public class ScrapService {
 	private final FilmeCinemaRepository fcRepository;
 	
 	@Transactional
-	public void atualizarFilmes(ScrapDTO scrap) {
+	public List<Filme> atualizarFilmes(ScrapDTO scrap) {
+		List<Filme> filmes = filmeService.preencherDadosFilmes(scrap.getFilmes(), scrap.getLinguagem());
+		List<Filme> novos = encontrarFilmesNovos(filmes, scrap.getLinguagem());
+		
 		fcRepository.deleteByCinemaCidade(scrap.getCidade());
 		cinemaService.atualizarCinemas(scrap.getCinemas(), scrap.getCidade());
-		List<String> semId = filmeService.salvar(scrap.getFilmes(), scrap.getLinguagem());
-		filmeService.salvarFilmeCinema(scrap.getFilmeCinemas(), semId);
+		filmeService.salvar(filmes);
+		filmeService.salvarFilmeCinema(scrap.getFilmeCinemas(), filmes);
 		detalhesRepository.deleteFilmeSemHorario();
+		
+		return novos;
 	}
 	
 	public List<Filme> encontrarFilmesNovos(List<Filme> filmes, Linguagem linguagem) {
@@ -44,7 +49,7 @@ public class ScrapService {
 		List<String> existentes = filmeRepository.findByImdbIdInAndDetalhesLinguagem(ids, linguagem.ordinal());
 		
 		List<Filme> filmesNovos = filmes.stream()
-	            .filter(e -> !existentes.contains(e.getImdbId()))
+	            .filter(e -> e.getImdbId() != null && !existentes.contains(e.getImdbId()))
 	            .collect(Collectors.toList());
 		
 		return filmesNovos;

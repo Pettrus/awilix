@@ -1,7 +1,6 @@
 package br.com.awilix.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,7 +16,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import br.com.awilix.config.SetupTest;
 import br.com.awilix.enums.Linguagem;
-import br.com.awilix.exception.GeneralException;
 import br.com.awilix.models.Filme;
 import br.com.awilix.repository.FilmeRepository;
 import info.movito.themoviedbapi.TmdbMovies.MovieMethod;
@@ -52,7 +50,7 @@ public class FilmeServiceTest extends SetupTest {
 		when(tmdbService.pesquisarIdPortImdb(filme.getImdbId(), linguagem)).thenReturn(1);
 		when(tmdbService.carregarCategoriaPorFilmeId(1, "pt-BR", MovieMethod.videos)).thenReturn(mock(MovieDb.class));
 		
-		service.salvar(List.of(filme), Linguagem.PORTUGUES_BRASIL);
-		verify(filmeRepository).save(Mockito.any());
+		service.salvar(List.of(filme));
+		verify(filmeRepository).saveAll(Mockito.any());
 	}
 }

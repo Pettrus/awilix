@@ -43,6 +43,6 @@ public class ScrapServiceTest extends SetupTest {
 		when(filmeRepository.findByImdbIdInAndDetalhesLinguagem(ids, linguagem.ordinal()))
 		.thenReturn(List.of("2"));
 		
-		assertThat(service.encontrarFilmesNovos(filmes, linguagem)).isNotEmpty();
+		assertThat(service.encontrarFilmesNovos(filmes, linguagem)).isEmpty();
 	}
 }
