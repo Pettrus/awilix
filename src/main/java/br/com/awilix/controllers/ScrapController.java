@@ -29,9 +29,7 @@ public class ScrapController {
 
 	@PostMapping
 	public ResponseEntity<?> verificarNovoESalvar(@RequestBody ScrapDTO scrap) {
-		List<Filme> filmesNovos = service.encontrarFilmesNovos(scrap.getFilmes(), scrap.getLinguagem());
-		
-		service.atualizarFilmes(scrap);
+		List<Filme> filmesNovos = service.atualizarFilmes(scrap);
 		fcmService.notificarUsuarios(filmesNovos);
 		emailService.notificarFilmesNovos(filmesNovos, scrap.getCidade());
 		
